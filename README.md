@@ -185,7 +185,3 @@ ENV_FILE=.env.production uv run uvicorn src.app.main:app --port 8002 --workers 4
 
 Raushan Tiwari
 Full Stack & GenAI Engineer
-
----
-
-If you want, I can also generate a more polished README.md version with badges, formatting, and GitHub-ready presentation 🚀
