@@ -9,6 +9,7 @@ dependencies = [
     "langchain>=1.2.10",
     "langchain-ollama>=1.0.1",
     "langchain-openai>=1.1.9",
+    "langsmith>=0.7.3",
     "pydantic>=2.12.5",
     "pydantic-settings>=2.12.0",
     "python-dotenv>=1.2.1",
