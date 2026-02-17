@@ -1,7 +1,7 @@
 [project]
 name = "langchain-course"
 version = "0.1.0"
-description = "Add your description here"
+description = "Production-grade LangChain application with FastAPI"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -13,7 +13,7 @@ dependencies = [
     "pydantic>=2.12.5",
     "pydantic-settings>=2.12.0",
     "python-dotenv>=1.2.1",
-    "uvicorn>=0.40.0",
+    "uvicorn[standard]>=0.40.0",
 ]
 
 [dependency-groups]
@@ -21,5 +21,136 @@ dev = [
     "black>=26.1.0",
     "isort>=7.0.0",
     "pytest>=9.0.2",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "httpx>=0.27.0",  # For testing FastAPI
     "ruff>=0.15.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# ==================== RUFF CONFIGURATION ====================
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+# Exclude directories
+exclude = [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    ".pytest_cache",
+    ".ruff_cache",
+    "dist",
+    "build",
+]
+
+[tool.ruff.lint]
+# Enable these rule sets
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort (import sorting) 🔥
+    "N",   # pep8-naming
+    "UP",  # pyupgrade (modernize Python code)
+    "B",   # flake8-bugbear (find likely bugs)
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+]
+
+# Ignore specific rules if needed
+ignore = [
+    "E501",  # Line too long (handled by formatter)
+]
+
+# Allow autofix for these rules
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.isort]
+# Configure import sorting
+known-first-party = ["app"]  # 🔥 Your package name
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder"
+]
+lines-after-imports = 2
+
+[tool.ruff.format]
+# Format configuration
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+# ==================== BLACK CONFIGURATION ====================
+[tool.black]
+line-length = 88
+target-version = ['py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.venv
+  | venv
+  | build
+  | dist
+)/
+'''
+
+# ==================== ISORT CONFIGURATION ====================
+[tool.isort]
+profile = "black"
+line_length = 88
+known_first_party = ["app"]
+skip = [".venv", "venv", "__pycache__"]
+
+# ==================== PYTEST CONFIGURATION ====================
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+asyncio_mode = "auto"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/.venv/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
 ]

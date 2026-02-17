@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 
 from langchain_openai import ChatOpenAI
 
@@ -29,7 +30,11 @@ def main():
 
     llm = ChatOpenAI(model="gpt-5-nano", temperature=0)
     # llm = ChatOllama(model="gemma3:latest", temperature=0)
-    chain = summary_prompt_template | llm
+
+    # Create output parser
+    output_parser = StrOutputParser()
+
+    chain = summary_prompt_template | llm | output_parser
 
     response = chain.invoke(input={"information": information})
     print(response)
